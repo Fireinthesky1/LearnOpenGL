@@ -22,6 +22,17 @@
     <ClCompile Include="..\..\..\OneDrive\Desktop\Useful Program Libraries\C++\glad.c" />
     <ClCompile Include="Application.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BasicShader.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\shader.frag" />
+    <None Include="shaders\shader.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="LearnOpenGL.rc" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
