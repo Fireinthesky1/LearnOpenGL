@@ -124,7 +124,7 @@ public:
 
 	void setFloat(const std::string& name, float value) const
 	{
-		glUniform1i(glGetUniformLocation(m_ID, name.c_str()), value);
+		glUniform1f(glGetUniformLocation(m_ID, name.c_str()), value);
 	}
 
 

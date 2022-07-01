@@ -128,6 +128,7 @@ int main()
 	glEnableVertexAttribArray(1);
 
 
+
 	//render loop
 	while (!glfwWindowShouldClose(window))
 	{
@@ -139,6 +140,8 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		ourShader.use();
+		ourShader.setFloat("x", sin(glfwGetTime()) / 2);
+		ourShader.setFloat("y", cos(glfwGetTime()) / 2);
 		glBindVertexArray(VAO1);
 		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
