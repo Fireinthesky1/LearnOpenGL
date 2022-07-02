@@ -1,4 +1,7 @@
 ﻿  Application.cpp
-C:\Users\James\source\repos\LearnOpenGL\Application.cpp(143,46): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\James\source\repos\LearnOpenGL\Application.cpp(144,46): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\James\source\repos\LearnOpenGL\Application.cpp(195,80): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\James\source\repos\LearnOpenGL\Application.cpp(195,44): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\James\source\repos\LearnOpenGL\Application.cpp(195,35): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\James\source\repos\LearnOpenGL\Application.cpp(199,46): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\James\source\repos\LearnOpenGL\Application.cpp(200,50): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   LearnOpenGL.vcxproj -> C:\Users\James\source\repos\LearnOpenGL\x64\Debug\LearnOpenGL.exe
