@@ -1,5 +1,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "stb_image.h"
 #include "BasicShader.h"
@@ -9,7 +12,7 @@
 
 //declarations
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow *window);
+void processInput(GLFWwindow *window, float &mixValue);
 
 
 
@@ -53,6 +56,9 @@ int main()
 
 	//build and compile shaders
 	Shader ourShader("shaders/shader.vert", "shaders/shader.frag");
+
+
+
 
 
 
@@ -101,8 +107,8 @@ int main()
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture0);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -182,20 +188,30 @@ int main()
 	ourShader.use();
 	glUniform1i(glGetUniformLocation(ourShader.m_ID, "texture0"), 0);
 	ourShader.setInt("texture1", 1);
-
+	float mixValue = 0.5;
 
 
 	//render loop
 	while (!glfwWindowShouldClose(window))
 	{
 		//input
-		processInput(window);
+		processInput(window, mixValue);
 
 		//rendering commands here
-		glClearColor(sin(glfwGetTime()) + .5, cos(glfwGetTime()), tan(glfwGetTime()) + .5, 1.0f);
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		//matrix transformations
+		glm::mat4 trans = glm::mat4(1.0f);
+		trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+		trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, 0.0f));
+
+		//passing the matrix transformation to the shader
+		unsigned int transformLocation = glGetUniformLocation(ourShader.m_ID, "transform");
+		glUniformMatrix4fv(transformLocation, 1, GL_FALSE, glm::value_ptr(trans));
+
 		ourShader.use();
+		ourShader.setFloat("mixValue", mixValue);
 		ourShader.setFloat("x", sin(glfwGetTime()) / 2);
 		ourShader.setFloat("y", cos(glfwGetTime() / 2) / 2);
 		glActiveTexture(GL_TEXTURE0);
@@ -205,6 +221,17 @@ int main()
 
 		glBindVertexArray(VAO1);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+		//matrix transformations
+		trans = glm::mat4(1.0f);
+		trans = glm::scale(trans, glm::vec3(sin(glfwGetTime()), cos(glfwGetTime()), 0.0f));
+		trans = glm::translate(trans, glm::vec3(-0.5f, 0.5f, 0.0f));
+
+		//passing the matrix transformation to the shader
+		glUniformMatrix4fv(transformLocation, 1, GL_FALSE, glm::value_ptr(trans));
+
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
 
 		//check and call events and swap the buffers
 		glfwSwapBuffers(window);
@@ -223,11 +250,33 @@ int main()
 
 
 //glfw: If the user presses the escape key the window will close
-void processInput(GLFWwindow *window)
+void processInput(GLFWwindow *window, float &mixValue)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(window, true);
+	}
+	else if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	{
+		if (mixValue >= 1.0)
+		{
+			mixValue = 1.0f;
+		}
+		else
+		{
+			mixValue += 0.01f;
+		}
+	}
+	else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+	{
+		if (mixValue <= 0.0)
+		{
+			mixValue = 0.0f;
+		}
+		else
+		{
+			mixValue -= 0.01f;
+		}
 	}
 }
 

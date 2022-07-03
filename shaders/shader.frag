@@ -8,9 +8,10 @@ in vec2 TexCoord;
 
 uniform sampler2D texture0;
 uniform sampler2D texture1;
+uniform float mixValue;
 
 void main()
 {
-	vec2 translation = vec2(-TexCoord.x, TexCoord.y);
-	FragColor = mix(texture(texture0, TexCoord) * vec4(vertPos, 1.0f), texture(texture1, translation), 0.5);
+	vec2 translation = vec2(2 * TexCoord.x, 2 * TexCoord.y);
+	FragColor = mix(texture(texture0, translation), texture(texture1, translation), mixValue);
 };
