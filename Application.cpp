@@ -12,7 +12,7 @@
 
 //declarations
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow *window, float &mixValue);
+void processInput(GLFWwindow *window, float &mixValue, float & zValue, float &xValue);
 
 
 
@@ -255,11 +255,11 @@ int main()
 
 	//view matrix
 	glm::mat4 view = glm::mat4(1.0f);
-	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+	view = glm::translate(view, glm::vec3(0.0f, 0.0f, 0.0f));
 
 	//projection matrix (perspective)
 	glm::mat4 projection;
-	projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+	projection = glm::perspective(glm::radians(55.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 
 
 
@@ -267,13 +267,15 @@ int main()
 	ourShader.setInt("texture0", 0);
 	ourShader.setInt("texture1", 1);
 	float mixValue = 0.5;
+	float zValue = 0.0f;
+	float xValue = 0.0f;
 
 
 	//render loop
 	while (!glfwWindowShouldClose(window))
 	{
 		//input
-		processInput(window, mixValue);
+		processInput(window, mixValue, zValue, xValue);
 
 		//rendering commands here
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -284,6 +286,7 @@ int main()
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
 		//send view matrix to the shader
+		view = glm::translate(view, glm::vec3(xValue, 0.0f, zValue));
 		int viewLoc = glGetUniformLocation(ourShader.m_ID, "view");
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 
@@ -293,6 +296,7 @@ int main()
 
 		ourShader.use();
 		ourShader.setFloat("mixValue", mixValue);
+		ourShader.setFloat("zValue", zValue);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture0);
 		glActiveTexture(GL_TEXTURE1);
@@ -329,7 +333,7 @@ int main()
 
 
 //glfw: If the user presses the escape key the window will close
-void processInput(GLFWwindow *window, float &mixValue)
+void processInput(GLFWwindow *window, float &mixValue, float &zValue, float &xValue)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 	{
@@ -337,6 +341,12 @@ void processInput(GLFWwindow *window, float &mixValue)
 	}
 	else if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
+		if (zValue >= 10.0f)
+			zValue = 10.0f;
+		else
+			std::cout << zValue << std::endl;
+			zValue += 0.01f;
+
 		if (mixValue >= 1.0)
 		{
 			mixValue = 1.0f;
@@ -348,6 +358,12 @@ void processInput(GLFWwindow *window, float &mixValue)
 	}
 	else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 	{
+		if (zValue <= -100.0f)
+			zValue = -100.0f;
+		else
+			std::cout << zValue << std::endl;
+			zValue -= 0.01f;
+
 		if (mixValue <= 0.0)
 		{
 			mixValue = 0.0f;
@@ -355,6 +371,28 @@ void processInput(GLFWwindow *window, float &mixValue)
 		else
 		{
 			mixValue -= 0.01f;
+		}
+	}
+	else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	{
+		if (xValue >= 10.0f)
+		{
+			xValue = 10.0f;
+		}
+		else
+		{
+			xValue += 0.01f;
+		}
+	}
+	else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	{
+		if (xValue <= -10.0f)
+		{
+			xValue = -10.0f;
+		}
+		else
+		{
+			xValue -= 0.01f;
 		}
 	}
 }
