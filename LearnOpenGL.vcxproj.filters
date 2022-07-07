@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Shader Files">
+      <UniqueIdentifier>{eb8708d0-1149-4179-b311-371e3cfb0a89}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\OneDrive\Desktop\Useful Program Libraries\C++\glad.c">
@@ -43,12 +46,24 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\shader.vert" />
-    <None Include="shaders\shader.frag" />
-    <None Include="shaders\lightSourceShader.vert" />
-    <None Include="shaders\lightSourceShader.frag" />
-    <None Include="shaders\lightingShader.frag" />
-    <None Include="shaders\lightingShader.vert" />
+    <None Include="shaders\objectShader.frag">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="shaders\objectShader.vert">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="shaders\lampShader.frag">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="shaders\lampShader.vert">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="shaders\shader.frag">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="shaders\shader.vert">
+      <Filter>Shader Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LearnOpenGL.rc">
