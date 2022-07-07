@@ -20,7 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\OneDrive\Desktop\Useful Program Libraries\C++\glad.c" />
-    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="BasicsMain.cpp" />
+    <ClCompile Include="LightingMain.cpp" />
     <ClCompile Include="stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -30,6 +31,10 @@
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="shaders\lightingShader.frag" />
+    <None Include="shaders\lightingShader.vert" />
+    <None Include="shaders\lightSourceShader.frag" />
+    <None Include="shaders\lightSourceShader.vert" />
     <None Include="shaders\shader.frag" />
     <None Include="shaders\shader.vert" />
   </ItemGroup>
