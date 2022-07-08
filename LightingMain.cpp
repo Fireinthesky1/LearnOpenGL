@@ -223,15 +223,34 @@ int main()
 		processInput(window);
 
 		//rendering commands here
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//activate the cube shader 
 		objectShader.use();
 		objectShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
-		objectShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 		objectShader.setVec3("lightPos", lightPos);
 		objectShader.setVec3("viewPos", camera.Position);
+
+
+
+		glm::vec3 lightColor;
+		lightColor.x = (sin(glfwGetTime()) * 2.0f);
+		lightColor.y = (cos(glfwGetTime()) * 0.7f);
+		lightColor.z = (sin(glfwGetTime()) * 1.3f);
+
+		glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
+		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
+
+		objectShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+		objectShader.setVec3("light.ambient", ambientColor);
+		objectShader.setVec3("light.diffuse", diffuseColor);
+		objectShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+
+		objectShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
+		objectShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
+		objectShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
+		objectShader.setFloat("material.shininess", 32.0f);
 
 		//send projection matrix to the shader
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
@@ -250,12 +269,13 @@ int main()
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		// Activate the lampShader
-		//lightPos.x = 1.0f + sin(glfwGetTime()) * 2.0f;
-		//lightPos.y = sin(glfwGetTime() / 2.0f) * 1.0f;
-		//lightPos.z = sin(glfwGetTime() * 2.0f) * 1.0f;
+		lightPos.x = 1.0f + sin(glfwGetTime()) * 2.0f;
+		lightPos.y = sin(glfwGetTime() / 2.0f) * 1.0f;
+		lightPos.z = sin(glfwGetTime() * 2.0f) * 1.0f;
 		lampShader.use();
 		lampShader.setMat4("projection", projection);
 		lampShader.setMat4("view", view);
+		lampShader.setVec3("lightColor", lightColor);
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, lightPos);
 		model = glm::scale(model, glm::vec3(0.2f));
