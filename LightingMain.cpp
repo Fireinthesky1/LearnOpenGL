@@ -248,16 +248,23 @@ int main()
 
 		//activate the cube shader 
 		objectShader.use();
-		objectShader.setVec3("light.position", lightPos);
+		objectShader.setVec3("light.position", camera.Position);
+		objectShader.setVec3("light.direction", camera.Front);
+		objectShader.setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
+		objectShader.setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
 		objectShader.setVec3("viewPos", camera.Position);
 		
 		//light properties
-		objectShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
-		objectShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
+		objectShader.setVec3("light.ambient", 0.1f, 0.1f, 0.1f);
+		objectShader.setVec3("light.diffuse", 0.8f, 0.8f, 0.8f);
 		objectShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
+		//attenuation properties
+		objectShader.setFloat("light.constant", 1.0f);
+		objectShader.setFloat("light.linear", 0.09f);
+		objectShader.setFloat("light.quadratic", 0.032f);
+
 		//material properties
-		objectShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
 		objectShader.setFloat("material.shininess", 64.0f);
 
 		//send projection matrix to the shader
@@ -280,28 +287,18 @@ int main()
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, specularMap);
 
-		//render a single cube
-		glBindVertexArray(cubeVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		
-		//bind the lamp shader
-		lampShader.use();
+		//rendering multiple cubes
+		for (unsigned int i = 0; i < 10; i++)
+		{
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::translate(model, cubePositions[i]);
+			float angle = 20.0f * i;
+			model = glm::rotate(model, glm::radians((float)glfwGetTime() * angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			objectShader.setMat4("model", model);
 
-		//send the projection matrix to the lamp shader
-		lampShader.setMat4("projection", projection);
-		
-		//send the view matrix to the lamp shader
-		lampShader.setMat4("view", view);
-		
-		//translate scale lamp and send model matrix to lamp shader
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, lightPos);
-		model = glm::scale(model, glm::vec3(0.2f));
-		lampShader.setMat4("model", model);
-
-		//bind the VAO for the lamp and render the lamp
-		glBindVertexArray(lampVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+			glBindVertexArray(cubeVAO);
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
 
 		//check and call events and swap the buffers
 		glfwSwapBuffers(window);

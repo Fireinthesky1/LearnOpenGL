@@ -1,12 +1,2 @@
 ﻿  LightingMain.cpp
-C:\Users\James\source\repos\LearnOpenGL\LightingMain.cpp(297,19): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\James\source\repos\LearnOpenGL\LightingMain.cpp(298,19): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
   LearnOpenGL.vcxproj -> C:\Users\James\source\repos\LearnOpenGL\x64\Debug\LearnOpenGL.exe
